@@ -2,6 +2,7 @@ package com.example.gsb_visite;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
                 GSBservice service = RetrofitClientInstence.RetrofitClientInstance.getRetrofitInstance().create(GSBservice.class);
                 Call<Visiteur> call = service.loginVisiteur(visiteur);
 
+
+
                 call.enqueue(new Callback<Visiteur>() {
                     @Override
                     public void onResponse(Call<Visiteur> call, Response<Visiteur> response) {
@@ -44,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText(MainActivity.this, "Erreur de réponse de l'API", Toast.LENGTH_SHORT).show();
                         }
+
+                        Intent intent = new Intent(MainActivity.this, AccueilActivity.class);
+                        intent.putExtra("token", response.body().getToken());
+                        intent.putExtra("visiteurId", response.body().getVisiteurId());
+                        startActivity(intent);
                     }
 
                     @Override
