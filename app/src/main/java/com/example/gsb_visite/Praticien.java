@@ -1,8 +1,8 @@
 package com.example.gsb_visite;
 
-import java.util.Date;
+import java.io.Serializable;
 
-public class Praticien {
+public class Praticien implements Serializable {
     private String nom;
     private String prenom;
     private String code_postale;
@@ -11,15 +11,6 @@ public class Praticien {
     private String rue;
     private String email;
 
-    public Praticien(String nom, String prenom, String code_postale, String tel, String ville, String rue, String email) {
-        this.nom = nom;
-        this.prenom = prenom;
-        this.code_postale = code_postale;
-        this.tel = tel;
-        this.ville = ville;
-        this.rue = rue;
-        this.email = email;
-    }
 
     public String getNom() {
         return nom;

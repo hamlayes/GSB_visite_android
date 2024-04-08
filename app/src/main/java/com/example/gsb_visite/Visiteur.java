@@ -1,5 +1,6 @@
 package com.example.gsb_visite;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Visiteur{
@@ -10,6 +11,7 @@ public class Visiteur{
     private Date date_embauche;
     private String email;
     private String password;
+    private ArrayList<Praticien> porteFeuille;
 
     public String getNom() {
         return nom;
@@ -17,6 +19,10 @@ public class Visiteur{
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public ArrayList<Praticien> getPorteFeuille() {
+        return porteFeuille;
     }
 
     public String getPrenom() {

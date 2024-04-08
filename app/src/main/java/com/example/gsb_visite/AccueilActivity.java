@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,7 @@ public class AccueilActivity extends AppCompatActivity {
         GSBservice service = RetrofitClientInstence.RetrofitClientInstance.getRetrofitInstance().create(GSBservice.class);
         Call<Visiteur> call = service.getVisiteur("Bearer " + token, visiteurId);
 
+
         call.enqueue(new Callback<Visiteur>() {
             @Override
             public void onResponse(Call<Visiteur> call, Response<Visiteur> response) {
@@ -55,20 +57,42 @@ public class AccueilActivity extends AppCompatActivity {
                     Visiteur visiteur = response.body();
                     String nom = visiteur.getNom();
                     binding.textViewVisiteur.setText(nom);
+                    AdapterPraticiens = new RecyclerViewAdpater(visiteur.getPorteFeuille());
+                    recyclerViewPraticiens.setAdapter(AdapterPraticiens);
 
                     // Make the API call to getPraticiens
+                    recyclerViewPraticiens.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerViewPraticiens, new RecyclerViewClickListener(){
+                        @Override
+                        public void onClick(View view, int position) {
+                            Praticien praticien = visiteur.getPorteFeuille().get(position);
+                            Intent intent = new Intent(AccueilActivity.this, DetailActivity.class);
+                            intent.putExtra("praticien", praticien);
+                            startActivity(intent);
+                        }
+                    }));
+
                 }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Visiteur> call, Throwable t) {
+                // Handle the error
+            }
+        });
+
+
+        /*binding.buttonTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Call<ArrayList<Praticien>> callPraticiens = service.getPraticien("Bearer " + token);
                 callPraticiens.enqueue(new Callback<ArrayList<Praticien>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Praticien>> call, Response<ArrayList<Praticien>> response) {
-                        if (response.isSuccessful()) {
-                            ArrayList<Praticien> praticiens = response.body();
-                            AdapterPraticiens = new RecyclerViewAdpater(praticiens);
-                            recyclerViewPraticiens.setAdapter(AdapterPraticiens);
-                        } else {
-                            // Handle the error
-                        }
+                        ArrayList<Praticien> praticiens = response.body();
+                        AdapterPraticiens = new RecyclerViewAdpater(praticiens);
+                        recyclerViewPraticiens.setAdapter(AdapterPraticiens);
                     }
 
                     @Override
@@ -77,12 +101,7 @@ public class AccueilActivity extends AppCompatActivity {
                     }
                 });
             }
-
-            @Override
-            public void onFailure(Call<Visiteur> call, Throwable t) {
-                // Handle the error
-            }
-        });
+        });*/
 
         ;}
 }
